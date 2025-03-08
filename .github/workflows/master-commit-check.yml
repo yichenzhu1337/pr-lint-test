@@ -1,0 +1,19 @@
+name: Enforce Commit Message Format
+
+on:
+  push:
+    branches:
+      - master # Adjust for your default branch
+
+jobs:
+  check-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Commit Message
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+
+          if [[ ! "$COMMIT_MSG" =~ ^CER-[0-9]{4}\ (build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-zA-Z0-9_-]+\))?!?:\ .+$ ]]; then
+            echo "❌ Commit message must follow the format: CER-XXXX <type>(<scope>): description"
+            exit 1
+          fi
