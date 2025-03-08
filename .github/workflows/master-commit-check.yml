@@ -3,12 +3,15 @@ name: Enforce Commit Message Format
 on:
   push:
     branches:
-      - master # Adjust for your default branch
+      - master # Adjust for your protected branch
 
 jobs:
   check-commit:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4 # REQUIRED to use git commands
+
       - name: Validate Commit Message
         run: |
           COMMIT_MSG=$(git log -1 --pretty=%B)
