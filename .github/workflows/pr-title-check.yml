@@ -1,0 +1,23 @@
+name: PR Title Check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  check-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR Title
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          if [[ ! "$PR_TITLE" =~ ^CER-[0-9]{4}\ (build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([\w\-\s]+\))?!?:\ .{1,}$ ]]; then
+            echo "❌ PR title must start with 'CER-XXXX' followed by a Conventional Commit format."
+            echo ""
+            echo "Example valid titles:"
+            echo "- CER-1234 feat(auth): add login button"
+            echo "- CER-5678 fix(ui): resolve button alignment"
+            echo "- CER-9012 docs(readme): update installation guide"
+            echo "- CER-3456 perf(database)!: improve indexing for speed"
+            exit 1
+          fi
