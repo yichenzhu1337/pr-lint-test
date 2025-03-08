@@ -27,11 +27,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const fs = require('fs');
-            const comment = fs.readFileSync('pr-comment.txt', 'utf8');
             github.rest.issues.createComment({
               issue_number: context.payload.pull_request.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: comment
+              body: 'what are you doing brotha? follow the conventional format!'
             });
